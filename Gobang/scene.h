@@ -2,6 +2,9 @@
 #define SCENE_H
 
 #include <QWidget>
+#include "QApplication"
+#include "QDeskTopWidget"
+#include "QPainter"
 
 class Scene : public QWidget
 {
@@ -12,7 +15,11 @@ public:
 	~Scene();
 
 private:
-	
+	int lineNum;
+	double interval;
+
+protected:
+	void paintEvent(QPaintEvent *);
 };
 
 #endif // SCENE_H
