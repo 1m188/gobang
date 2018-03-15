@@ -45,13 +45,13 @@ void Scene::paintEvent(QPaintEvent *event)
 	painter->setBrush(QBrush(Qt::black));
 	for (QPair<int, int> i : blackPos)
 	{
-		painter->drawEllipse(i.first*interval, i.second*interval, interval, interval);
+		painter->drawEllipse(i.first*interval - interval / 2, i.second*interval - interval / 2, interval, interval);
 	}
 	//»­°××Ó
 	painter->setBrush(QBrush(Qt::white));
 	for (QPair<int, int> i : whitePos)
 	{
-		painter->drawEllipse(i.first*interval, i.second*interval, interval, interval);
+		painter->drawEllipse(i.first*interval - interval / 2, i.second*interval - interval / 2, interval, interval);
 	}
 
 	painter->end();
@@ -59,5 +59,25 @@ void Scene::paintEvent(QPaintEvent *event)
 
 void Scene::mousePressEvent(QMouseEvent *event)
 {
-	
+	for (QVector<QPair<int, int>>::iterator it = pos.begin(); it != pos.end(); it++)
+	{
+		int x = it->first;
+		int y = it->second;
+		if (sqrt(pow(x*interval - event->pos().x(), 2) + pow(y*interval - event->pos().y(), 2)) < 10)
+		{
+			if (whichPlayer == black)
+			{
+				blackPos.push_back(*it);
+				whichPlayer = white;
+			}
+			else if (whichPlayer == white)
+			{
+				whitePos.push_back(*it);
+				whichPlayer = black;
+			}
+			pos.erase(it);
+			break;
+		}
+	}
+	update();
 }
