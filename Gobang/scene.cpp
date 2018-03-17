@@ -79,5 +79,79 @@ void Scene::mousePressEvent(QMouseEvent *event)
 			break;
 		}
 	}
+
 	update();
+
+	//判定输赢
+	if (whichPlayer == black)
+	{
+		if (isWin(whitePos))
+		{
+			QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"白棋胜！"));
+			for (QVector<QPair<int, int>>::const_iterator it = blackPos.begin(); it != blackPos.end(); it++)
+			{
+				pos.push_back(*it);
+			}
+			blackPos.clear();
+			for (QVector<QPair<int, int>>::const_iterator it = whitePos.begin(); it != whitePos.end(); it++)
+			{
+				pos.push_back(*it);
+			}
+			whitePos.clear();
+			whichPlayer = black;
+		}
+	}
+	else if (whichPlayer == white)
+	{
+		if (isWin(blackPos))
+		{
+			QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"黑棋胜！"));
+			for (QVector<QPair<int, int>>::const_iterator it = blackPos.begin(); it != blackPos.end(); it++)
+			{
+				pos.push_back(*it);
+			}
+			blackPos.clear();
+			for (QVector<QPair<int, int>>::const_iterator it = whitePos.begin(); it != whitePos.end(); it++)
+			{
+				pos.push_back(*it);
+			}
+			whitePos.clear();
+			whichPlayer = black;
+		}
+	}
+}
+
+bool Scene::isWin(QVector<QPair<int, int>> chess)
+{
+	//上下方向
+	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
+	{
+		int num = 1;
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first, it->second + i}); i++)
+		{
+			num++;
+		}
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first, it->second - i}); i++)
+		{
+			num++;
+		}
+		if (num == 5)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Scene::isExist(QVector<QPair<int, int>> judgeAim, QPair<int, int> element)
+{
+	for (QVector<QPair<int, int>>::const_iterator it = judgeAim.begin(); it != judgeAim.end(); it++)
+	{
+		if (it->first == element.first&&it->second == element.second)
+		{
+			return true;
+		}
+	}
+	return false;
 }

@@ -6,6 +6,7 @@
 #include "QDeskTopWidget"
 #include "QPainter"
 #include "QMouseEvent"
+#include "QMessageBox"
 #include "cmath"
 
 class Scene : public QWidget
@@ -31,6 +32,11 @@ private:
 	QVector<QPair<int, int>> pos;
 	QVector<QPair<int, int>> blackPos;
 	QVector<QPair<int, int>> whitePos;
+
+	//判定输赢
+	bool isWin(QVector<QPair<int, int>>);
+	//判定该容器之中是否有某个元素
+	bool isExist(QVector<QPair<int, int>>, QPair<int, int>);
 
 protected:
 	void paintEvent(QPaintEvent *);
