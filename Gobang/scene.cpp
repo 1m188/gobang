@@ -157,6 +157,40 @@ bool Scene::isWin(QVector<QPair<int, int>> chess)
 			return true;
 		}
 	}
+	//左上右下方向
+	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
+	{
+		int num = 1;
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first - i, it->second - i}); i++)
+		{
+			num++;
+		}
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first + i, it->second + i}); i++)
+		{
+			num++;
+		}
+		if (num == 5)
+		{
+			return true;
+		}
+	}
+	//右上左下方向
+	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
+	{
+		int num = 1;
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first + i, it->second - i}); i++)
+		{
+			num++;
+		}
+		for (int i = 1; isExist(chess, QPair<int, int>{it->first - i, it->second + i}); i++)
+		{
+			num++;
+		}
+		if (num == 5)
+		{
+			return true;
+		}
+	}
 
 	return false;
 }
