@@ -7,6 +7,7 @@
 #include "QPainter"
 #include "QMouseEvent"
 #include "QMessageBox"
+#include "QMap"
 #include "cmath"
 
 class Scene : public QWidget
@@ -27,6 +28,8 @@ private:
 		white
 	};
 	player whichPlayer;
+
+	QMap<player, QString> title;
 
 	//以下三个坐标都是先x，再y
 	QVector<QPair<int, int>> pos;

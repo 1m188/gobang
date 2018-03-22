@@ -1,9 +1,12 @@
 #include "scene.h"
 
 Scene::Scene(QWidget *parent)
-	: QWidget(parent), lineNum(15), whichPlayer(black), pos({}), blackPos({}), whitePos({})
+	: QWidget(parent), lineNum(15), whichPlayer(black), title(QMap<player, QString>{}), pos({}), blackPos({}), whitePos({})
 {
-	setWindowTitle(tr(u8"五子棋"));
+	title[black] = tr(u8"五子棋-请黑棋落子");
+	title[white] = tr(u8"五子棋-请白棋落子");
+
+	setWindowTitle(tr(u8"五子棋-请黑棋落子"));
 	setFixedSize(960, 960);
 	QRect rect = frameGeometry();
 	rect.moveCenter(QApplication::desktop()->availableGeometry().center());
@@ -69,11 +72,13 @@ void Scene::mousePressEvent(QMouseEvent *event)
 			{
 				blackPos.push_back(*it);
 				whichPlayer = white;
+				setWindowTitle(title[white]);
 			}
 			else if (whichPlayer == white)
 			{
 				whitePos.push_back(*it);
 				whichPlayer = black;
+				setWindowTitle(title[black]);
 			}
 			pos.erase(it);
 			break;
@@ -99,6 +104,7 @@ void Scene::mousePressEvent(QMouseEvent *event)
 			}
 			whitePos.clear();
 			whichPlayer = black;
+			setWindowTitle(title[black]);
 		}
 	}
 	else if (whichPlayer == white)
@@ -117,6 +123,7 @@ void Scene::mousePressEvent(QMouseEvent *event)
 			}
 			whitePos.clear();
 			whichPlayer = black;
+			setWindowTitle(title[black]);
 		}
 	}
 }
