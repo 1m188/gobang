@@ -1,9 +1,10 @@
 #include <QtWidgets/QApplication>
-#include "scene.h"
+#include "Window.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	Scene w(nullptr);
+	Window *window = new Window();
+	window->show();
 	return a.exec();
 }

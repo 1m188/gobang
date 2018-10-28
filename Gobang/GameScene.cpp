@@ -1,17 +1,32 @@
-#include "scene.h"
+#include "GameScene.h"
+#include "QPainter"
+#include "QMouseEvent"
+#include "QMessageBox"
 
-Scene::Scene(QWidget *parent)
-	: QWidget(parent), lineNum(15), whichPlayer(black), title(QMap<player, QString>{}), pos({}), blackPos({}), whitePos({})
+GameScene::GameScene(QWidget *parent) :QWidget(parent)
 {
-	title[black] = tr(u8"五子棋-请黑棋落子");
-	title[white] = tr(u8"五子棋-请白棋落子");
+	resize(parent->size()); //把场景大小铺成和窗口大小一样大
+}
 
-	setWindowTitle(tr(u8"五子棋-请黑棋落子"));
-	setFixedSize(960, 960);
-	QRect rect = frameGeometry();
-	rect.moveCenter(QApplication::desktop()->availableGeometry().center());
-	move(rect.topLeft().x(), rect.topLeft().y() - 20);
+GameScene::~GameScene()
+{
+}
+
+void GameScene::init()
+{
+	//初始化游戏相关变量
+	lineNum = 15;
+	whichPlayer = black;
+	title = QMap<player, QString>{ {black,tr(u8"五子棋-请黑棋落子") },{white,tr(u8"五子棋-请白棋落子") } };
+	pos = {};
+	blackPos = {};
+	whitePos = {};
+
+	//初始化窗口标题
+	parentWidget()->setWindowTitle(title[whichPlayer]);
+
 	//刷白背景
+	setAutoFillBackground(true);
 	setPalette(QPalette(QColor(Qt::white)));
 
 	//线间距
@@ -26,17 +41,14 @@ Scene::Scene(QWidget *parent)
 		}
 	}
 
-	show();
+	//重绘棋盘
+	update();
 }
 
-Scene::~Scene()
-{
-
-}
-
-void Scene::paintEvent(QPaintEvent *event)
+void GameScene::paintEvent(QPaintEvent *event)
 {
 	QPainter *painter = new QPainter(this);
+
 	//画背景线
 	painter->setPen(QPen(QColor(Qt::black)));
 	for (int i = 1; i <= lineNum; i++)
@@ -44,12 +56,14 @@ void Scene::paintEvent(QPaintEvent *event)
 		painter->drawLine(0, i*interval, width(), i*interval);
 		painter->drawLine(i*interval, 0, i*interval, height());
 	}
+
 	//画黑子
 	painter->setBrush(QBrush(Qt::black));
 	for (QPair<int, int> i : blackPos)
 	{
 		painter->drawEllipse(i.first*interval - interval / 2, i.second*interval - interval / 2, interval, interval);
 	}
+
 	//画白子
 	painter->setBrush(QBrush(Qt::white));
 	for (QPair<int, int> i : whitePos)
@@ -58,10 +72,13 @@ void Scene::paintEvent(QPaintEvent *event)
 	}
 
 	painter->end();
+
+	return QWidget::paintEvent(event);
 }
 
-void Scene::mousePressEvent(QMouseEvent *event)
+void GameScene::mousePressEvent(QMouseEvent *event)
 {
+	//判定落子
 	for (QVector<QPair<int, int>>::iterator it = pos.begin(); it != pos.end(); it++)
 	{
 		int x = it->first;
@@ -72,64 +89,55 @@ void Scene::mousePressEvent(QMouseEvent *event)
 			{
 				blackPos.push_back(*it);
 				whichPlayer = white;
-				setWindowTitle(title[white]);
 			}
 			else if (whichPlayer == white)
 			{
 				whitePos.push_back(*it);
 				whichPlayer = black;
-				setWindowTitle(title[black]);
 			}
+			parentWidget()->setWindowTitle(title[whichPlayer]); //重设窗口标题
 			pos.erase(it);
 			break;
 		}
 	}
 
-	update();
+	update(); //刷新当前的棋盘和棋子
 
 	//判定输赢
-	if (whichPlayer == black)
+	if (whichPlayer == black&&isWin(whitePos))
 	{
-		if (isWin(whitePos))
-		{
-			QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"白棋胜！"));
-			for (QVector<QPair<int, int>>::const_iterator it = blackPos.begin(); it != blackPos.end(); it++)
-			{
-				pos.push_back(*it);
-			}
-			blackPos.clear();
-			for (QVector<QPair<int, int>>::const_iterator it = whitePos.begin(); it != whitePos.end(); it++)
-			{
-				pos.push_back(*it);
-			}
-			whitePos.clear();
-			whichPlayer = black;
-			setWindowTitle(title[black]);
-		}
+		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"白棋胜！"));
 	}
-	else if (whichPlayer == white)
+	else if (whichPlayer == white&&isWin(blackPos))
 	{
-		if (isWin(blackPos))
-		{
-			QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"黑棋胜！"));
-			for (QVector<QPair<int, int>>::const_iterator it = blackPos.begin(); it != blackPos.end(); it++)
-			{
-				pos.push_back(*it);
-			}
-			blackPos.clear();
-			for (QVector<QPair<int, int>>::const_iterator it = whitePos.begin(); it != whitePos.end(); it++)
-			{
-				pos.push_back(*it);
-			}
-			whitePos.clear();
-			whichPlayer = black;
-			setWindowTitle(title[black]);
-		}
+		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"黑棋胜！"));
 	}
+	else
+	{
+		return QWidget::mousePressEvent(event);
+	}
+
+	//重新初始化相关数据
+	for (QVector<QPair<int, int>>::const_iterator it = blackPos.begin(); it != blackPos.end(); it++)
+	{
+		pos.push_back(*it);
+	}
+	blackPos.clear();
+	for (QVector<QPair<int, int>>::const_iterator it = whitePos.begin(); it != whitePos.end(); it++)
+	{
+		pos.push_back(*it);
+	}
+	whitePos.clear();
+	whichPlayer = black;
+	parentWidget()->setWindowTitle(title[whichPlayer]); //重设窗口标题
+
+	return QWidget::mousePressEvent(event);
 }
 
-bool Scene::isWin(QVector<QPair<int, int>> chess)
+bool GameScene::isWin(QVector<QPair<int, int>> chess)
 {
+	//这里判断是否有一方赢了，如果有的话会在判断的过程中直接return true，否则在最后会return false
+
 	//上下方向
 	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
 	{
@@ -147,6 +155,7 @@ bool Scene::isWin(QVector<QPair<int, int>> chess)
 			return true;
 		}
 	}
+
 	//左右方向
 	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
 	{
@@ -164,6 +173,7 @@ bool Scene::isWin(QVector<QPair<int, int>> chess)
 			return true;
 		}
 	}
+
 	//左上右下方向
 	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
 	{
@@ -181,6 +191,7 @@ bool Scene::isWin(QVector<QPair<int, int>> chess)
 			return true;
 		}
 	}
+
 	//右上左下方向
 	for (QVector<QPair<int, int>>::const_iterator it = chess.begin(); it != chess.end(); it++)
 	{
@@ -202,7 +213,7 @@ bool Scene::isWin(QVector<QPair<int, int>> chess)
 	return false;
 }
 
-bool Scene::isExist(QVector<QPair<int, int>> judgeAim, QPair<int, int> element)
+bool GameScene::isExist(QVector<QPair<int, int>> judgeAim, QPair<int, int> element)
 {
 	for (QVector<QPair<int, int>>::const_iterator it = judgeAim.begin(); it != judgeAim.end(); it++)
 	{
