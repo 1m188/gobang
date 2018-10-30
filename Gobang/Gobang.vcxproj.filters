@@ -27,6 +27,9 @@
     <Filter Include="游戏窗口">
       <UniqueIdentifier>{c63827c7-509d-4655-9ed7-369c2f805f54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="导演">
+      <UniqueIdentifier>{6fdfef10-40a4-4a6b-9ca5-28a98be6b6ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_scene.cpp">
@@ -51,6 +54,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_GameScene.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Director.cpp">
+      <Filter>导演</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="scene.qrc">
@@ -62,5 +68,10 @@
     <CustomBuild Include="GameScene.h">
       <Filter>游戏主场景</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Director.h">
+      <Filter>导演</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

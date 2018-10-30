@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "Director.h"
 #include "QPainter"
 #include "QMouseEvent"
 #include "QMessageBox"
@@ -23,7 +24,7 @@ void GameScene::init()
 	whitePos = {};
 
 	//初始化窗口标题
-	parentWidget()->setWindowTitle(title[whichPlayer]);
+	Director::getInstance()->getWindow()->setWindowTitle(title[whichPlayer]);
 
 	//刷白背景
 	setAutoFillBackground(true);
@@ -95,7 +96,7 @@ void GameScene::mousePressEvent(QMouseEvent *event)
 				whitePos.push_back(*it);
 				whichPlayer = black;
 			}
-			parentWidget()->setWindowTitle(title[whichPlayer]); //重设窗口标题
+			Director::getInstance()->getWindow()->setWindowTitle(title[whichPlayer]); //重设窗口标题
 			pos.erase(it);
 			break;
 		}
@@ -129,7 +130,7 @@ void GameScene::mousePressEvent(QMouseEvent *event)
 	}
 	whitePos.clear();
 	whichPlayer = black;
-	parentWidget()->setWindowTitle(title[whichPlayer]); //重设窗口标题
+	Director::getInstance()->getWindow()->setWindowTitle(title[whichPlayer]); //重设窗口标题
 
 	return QWidget::mousePressEvent(event);
 }
