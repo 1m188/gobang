@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
-      <Extensions>qrc;*</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
     <Filter Include="Generated Files">
       <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
       <Extensions>moc;h;cpp</Extensions>
@@ -21,20 +16,23 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="游戏主场景">
-      <UniqueIdentifier>{179f05a4-a0ae-43bc-a4b1-c68b5c7e429d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="游戏窗口">
       <UniqueIdentifier>{c63827c7-509d-4655-9ed7-369c2f805f54}</UniqueIdentifier>
     </Filter>
     <Filter Include="导演">
       <UniqueIdentifier>{6fdfef10-40a4-4a6b-9ca5-28a98be6b6ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="场景">
+      <UniqueIdentifier>{75e7a072-6e8a-4522-8c1f-eae02d026457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="场景\开始场景">
+      <UniqueIdentifier>{75aa0d47-d9ce-4edd-9399-75c50cb941f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="场景\游戏主场景">
+      <UniqueIdentifier>{179f05a4-a0ae-43bc-a4b1-c68b5c7e429d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\qrc_scene.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_Window.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -46,7 +44,7 @@
       <Filter>游戏窗口</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
-      <Filter>游戏主场景</Filter>
+      <Filter>场景\游戏主场景</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_GameScene.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -57,16 +55,25 @@
     <ClCompile Include="Director.cpp">
       <Filter>导演</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_StartScene.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_StartScene.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>场景\开始场景</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="scene.qrc">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="Window.h">
       <Filter>游戏窗口</Filter>
     </CustomBuild>
     <CustomBuild Include="GameScene.h">
-      <Filter>游戏主场景</Filter>
+      <Filter>场景\游戏主场景</Filter>
+    </CustomBuild>
+    <CustomBuild Include="StartScene.h">
+      <Filter>场景\开始场景</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

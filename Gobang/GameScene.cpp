@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Director.h"
+#include "StartScene.h"
 #include "QPainter"
 #include "QMouseEvent"
 #include "QMessageBox"
@@ -105,13 +106,18 @@ void GameScene::mousePressEvent(QMouseEvent *event)
 	update(); //刷新当前的棋盘和棋子
 
 	//判定输赢
-	if (whichPlayer == black&&isWin(whitePos))
+	if ((whichPlayer == black&&isWin(whitePos)) || (whichPlayer == white&&isWin(blackPos)))
 	{
-		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"游戏结束，白棋胜！"));
-	}
-	else if (whichPlayer == white&&isWin(blackPos))
-	{
-		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"游戏结束，黑棋胜！"));
+		//如果不想再来一局的话返回开始场景
+		if (QMessageBox::information(this, tr(u8"游戏结束"), tr(QString(u8"游戏结束，").toUtf8() + (whichPlayer == black ? u8"白" : u8"黑") + u8"棋胜！是否想要再来一局？"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+		{
+			StartScene *startScene = new StartScene(Director::getInstance()->getWindow());
+			startScene->init();
+			startScene->show();
+			hide();
+			deleteLater();
+			return QWidget::mousePressEvent(event);
+		}
 	}
 	else
 	{

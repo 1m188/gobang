@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "QApplication"
 #include "QDeskTopWidget"
-#include "GameScene.h"
+#include "StartScene.h"
 
 Window::Window(QWidget *parent)
 	: QWidget(parent)
@@ -29,8 +29,8 @@ void Window::show()
 {
 	QWidget::show();
 
-	//游戏场景
-	GameScene *gameScene = new GameScene(this);
-	gameScene->init();
-	gameScene->show();
+	//开始场景
+	StartScene *startScene = new StartScene(this);
+	startScene->init();
+	startScene->show();
 }
