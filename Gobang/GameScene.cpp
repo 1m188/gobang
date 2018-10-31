@@ -107,11 +107,11 @@ void GameScene::mousePressEvent(QMouseEvent *event)
 	//判定输赢
 	if (whichPlayer == black&&isWin(whitePos))
 	{
-		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"白棋胜！"));
+		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"游戏结束，白棋胜！"));
 	}
 	else if (whichPlayer == white&&isWin(blackPos))
 	{
-		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"黑棋胜！"));
+		QMessageBox::about(this, tr(u8"游戏结束"), tr(u8"游戏结束，黑棋胜！"));
 	}
 	else
 	{
