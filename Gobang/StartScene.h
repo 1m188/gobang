@@ -1,10 +1,10 @@
 #ifndef STARTSCENE_H
 #define STARTSCENE_H
 
-#include <QWidget>
+#include "Scene.h"
 
 //游戏开始的场景
-class StartScene : public QWidget
+class StartScene : public Scene
 {
 	Q_OBJECT
 

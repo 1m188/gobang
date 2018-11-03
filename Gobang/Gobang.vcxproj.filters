@@ -64,6 +64,15 @@
     <ClCompile Include="StartScene.cpp">
       <Filter>场景\开始场景</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_Scene.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_Scene.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>场景</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Window.h">
@@ -74,6 +83,9 @@
     </CustomBuild>
     <CustomBuild Include="StartScene.h">
       <Filter>场景\开始场景</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Scene.h">
+      <Filter>场景</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

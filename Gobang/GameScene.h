@@ -1,10 +1,10 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
-#include <QWidget>
+#include "Scene.h"
 #include "QMap"
 
-class GameScene : public QWidget
+class GameScene : public Scene
 {
 	Q_OBJECT
 

@@ -6,15 +6,12 @@
 #include "QGridLayout"
 #include "QApplication"
 
-StartScene::StartScene(QWidget *parent)
-	: QWidget(parent)
+StartScene::StartScene(QWidget *parent) :Scene(parent)
 {
-	resize(parent->size());
 }
 
 StartScene::~StartScene()
 {
-
 }
 
 void StartScene::init()

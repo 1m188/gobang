@@ -5,9 +5,8 @@
 #include "QMouseEvent"
 #include "QMessageBox"
 
-GameScene::GameScene(QWidget *parent) :QWidget(parent)
+GameScene::GameScene(QWidget *parent) :Scene(parent)
 {
-	resize(parent->size()); //把场景大小铺成和窗口大小一样大
 }
 
 GameScene::~GameScene()
