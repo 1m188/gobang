@@ -18,3 +18,13 @@ Director * Director::getInstance()
 	}
 	return instance;
 }
+
+void Director::setWindow(Window * window)
+{
+	this->window = window;
+}
+
+Window * Director::getWindow()
+{
+	return window;
+}

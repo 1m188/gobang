@@ -21,9 +21,9 @@ public:
 	static Director *getInstance(); //获取单例
 
 	//设置游戏窗口指针实例
-	void setWindow(Window *window) { this->window = window; }
+	void setWindow(Window *window);
 	//获取游戏窗口指针实例
-	Window *getWindow() { return window; }
+	Window *getWindow();
 };
 
 #endif // !DIRECTOR_H
