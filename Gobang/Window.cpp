@@ -27,10 +27,10 @@ Window::~Window()
 
 void Window::show()
 {
-	QWidget::show();
-
 	//¿ªÊ¼³¡¾°
 	StartScene *startScene = new StartScene(this);
 	startScene->init();
 	startScene->show();
+
+	QWidget::show();
 }
