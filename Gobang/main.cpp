@@ -1,6 +1,5 @@
 #include <QtWidgets/QApplication>
 #include "Director.h"
-#include "Window.h"
 
 int main(int argc, char *argv[])
 {
