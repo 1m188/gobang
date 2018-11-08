@@ -9,14 +9,10 @@ class StartScene : public Scene
 	Q_OBJECT
 
 public:
-	StartScene(QWidget *parent);
+	StartScene(Window *parent);
 	~StartScene();
 
-private:
-
-
-public:
-	void init();
+	void init() override;
 
 	private slots:
 	void newGameButtonClicked(); //单击开始新游戏按钮

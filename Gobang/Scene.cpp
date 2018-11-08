@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-Scene::Scene(QWidget *parent)
+Scene::Scene(Window *parent)
 	: QWidget(parent)
 {
 	resize(parent->size());

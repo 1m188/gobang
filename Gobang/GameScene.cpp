@@ -5,7 +5,7 @@
 #include "QMouseEvent"
 #include "QMessageBox"
 
-GameScene::GameScene(QWidget *parent) :Scene(parent)
+GameScene::GameScene(Window *parent) :Scene(parent)
 {
 }
 

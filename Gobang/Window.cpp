@@ -3,8 +3,7 @@
 #include "QDeskTopWidget"
 #include "StartScene.h"
 
-Window::Window(QWidget *parent)
-	: QWidget(parent)
+Window::Window() : QWidget(Q_NULLPTR)
 {
 	//ª˘±æ…Ë÷√
 	setAttribute(Qt::WA_DeleteOnClose, true);

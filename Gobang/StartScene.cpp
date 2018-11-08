@@ -6,7 +6,7 @@
 #include "QGridLayout"
 #include "QApplication"
 
-StartScene::StartScene(QWidget *parent) :Scene(parent)
+StartScene::StartScene(Window *parent) :Scene(parent)
 {
 }
 

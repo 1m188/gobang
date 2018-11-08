@@ -4,13 +4,10 @@
 #include "Scene.h"
 #include "QMap"
 
+//游戏主场景
 class GameScene : public Scene
 {
 	Q_OBJECT
-
-public:
-	GameScene(QWidget *parent);
-	~GameScene();
 
 private:
 	int lineNum; //横竖线的数量
@@ -36,12 +33,15 @@ private:
 	//判定该容器之中是否有某个元素
 	bool isExist(QVector<QPair<int, int>>, QPair<int, int>);
 
-protected:
-	void paintEvent(QPaintEvent *) override; //重写绘制事件，绘制棋盘和棋子
-	void mousePressEvent(QMouseEvent *) override; //重写鼠标点击事件，确定落子和判定输赢
-
 public:
-	void init(); //初始化
+	GameScene(Window *parent);
+	~GameScene();
+
+	void init() override; //初始化
+
+protected:
+	void paintEvent(QPaintEvent *event) override; //重写绘制事件，绘制棋盘和棋子
+	void mousePressEvent(QMouseEvent *event) override; //重写鼠标点击事件，确定落子和判定输赢
 };
 
 #endif // GAMESCENE_H
