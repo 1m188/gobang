@@ -33,7 +33,11 @@ void Config::init()
 	if (f.exists())
 	{
 		f.open(QIODevice::ReadOnly);
-		themeResourceUrl = f.readLine();
+		QString temp;
+		//读取主题资源url
+		temp = f.readLine();
+		temp.chop(1);
+		themeResourceUrl = temp;
 		f.close();
 	}
 	//否则新建文件，并用默认的设置开始游戏
@@ -52,6 +56,7 @@ void Config::uninit()
 	QFile f("config.ini");
 	f.open(QIODevice::WriteOnly | QIODevice::Truncate); //只写+清空已有内容
 	f.write(themeResourceUrl.toStdString().c_str());
+	f.write("\n");
 	f.close();
 }
 
