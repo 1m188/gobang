@@ -37,6 +37,9 @@
     <Filter Include="场景\主题选择场景">
       <UniqueIdentifier>{cf04d797-6bb2-4fe2-b7a5-44b68071b528}</UniqueIdentifier>
     </Filter>
+    <Filter Include="设置">
+      <UniqueIdentifier>{e0e37b96-cef7-40cb-a532-38c6d1a7c29e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -97,6 +100,9 @@
     <ClCompile Include="ThemeChooseScene.cpp">
       <Filter>场景\主题选择场景</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>设置</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Window.h">
@@ -121,6 +127,9 @@
   <ItemGroup>
     <ClInclude Include="Director.h">
       <Filter>导演</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>设置</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
