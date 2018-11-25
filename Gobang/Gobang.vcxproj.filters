@@ -31,6 +31,9 @@
     <Filter Include="场景\游戏主场景">
       <UniqueIdentifier>{179f05a4-a0ae-43bc-a4b1-c68b5c7e429d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="场景\设置场景">
+      <UniqueIdentifier>{987e18ac-e224-41e5-9063-a97da41aaf0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -73,6 +76,15 @@
     <ClCompile Include="Scene.cpp">
       <Filter>场景</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SettingScene.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SettingScene.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingScene.cpp">
+      <Filter>场景\设置场景</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Window.h">
@@ -86,6 +98,9 @@
     </CustomBuild>
     <CustomBuild Include="Scene.h">
       <Filter>场景</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SettingScene.h">
+      <Filter>场景\设置场景</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
