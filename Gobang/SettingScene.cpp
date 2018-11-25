@@ -1,6 +1,7 @@
 #include "SettingScene.h"
 #include "Director.h"
 #include "StartScene.h"
+#include "ThemeChooseScene.h"
 #include "QLabel"
 #include "QPushButton"
 #include "QGridLayout"
@@ -27,6 +28,7 @@ void SettingScene::init()
 	QPushButton *themeChooseButton = new QPushButton(this);
 	themeChooseButton->setFont(QFont(u8"Î¢ÈíÑÅºÚ", 15));
 	themeChooseButton->setText(tr(u8"Ö÷ÌâÑ¡Ôñ"));
+	connect(themeChooseButton, &QPushButton::clicked, this, &SettingScene::themeChooseButtonClicked);
 
 	QPushButton *returnToStartScene = new QPushButton(this);
 	returnToStartScene->setFont(QFont(u8"Î¢ÈíÑÅºÚ", 15));
@@ -38,6 +40,14 @@ void SettingScene::init()
 	layout->addWidget(infoLabel, 0, 0, 10, 15);
 	layout->addWidget(themeChooseButton, 10, 5, 3, 5);
 	layout->addWidget(returnToStartScene, 13, 5, 3, 5);
+}
+
+void SettingScene::themeChooseButtonClicked()
+{
+	ThemeChooseScene *themeChooseScene = new ThemeChooseScene(Director::getInstance()->getWindow());
+	themeChooseScene->init();
+	themeChooseScene->show();
+	deleteLater();
 }
 
 void SettingScene::returnToStartSceneButtonClicked()
