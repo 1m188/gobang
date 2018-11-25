@@ -1,5 +1,6 @@
 #include "ThemeChooseScene.h"
 #include "Director.h"
+#include "Config.h"
 #include "StartScene.h"
 #include "QLabel"
 #include "QPushButton"
@@ -65,7 +66,7 @@ void ThemeChooseScene::init()
 
 void ThemeChooseScene::themeChooseButtonClicked()
 {
-
+	Config::getInstance()->setTheme(QString(":/theme/Resoueces/theme/%1.qss").arg(sender()->objectName()));
 }
 
 void ThemeChooseScene::returnToStartSceneButtonClicked()

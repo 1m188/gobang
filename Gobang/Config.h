@@ -11,6 +11,8 @@ private:
 
 	static Config *instance; //单例指针
 
+	QString themeResourceUrl; //主题资源url
+
 public:
 	Config(const Config &) = delete;
 	Config &operator=(const Config &) = delete;
@@ -20,6 +22,7 @@ public:
 
 	void init(); //初始化所有设置
 	void uninit(); //保存设置
+	void setTheme(QString themeResourceUrl); //设置当前主题
 };
 
 #endif // CONFIG_H

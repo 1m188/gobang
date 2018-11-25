@@ -1,5 +1,6 @@
 #include <QtWidgets/QApplication>
 #include "Director.h"
+#include "Config.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,7 +9,10 @@ int main(int argc, char *argv[])
 #endif // NDEBUG
 
 	QApplication a(argc, argv);
+	Config::getInstance()->init();
 	Director::getInstance()->setWindow(new Window());
 	Director::getInstance()->getWindow()->show();
-	return a.exec();
+	a.exec();
+	Config::getInstance()->uninit();
+	return 0;
 }
