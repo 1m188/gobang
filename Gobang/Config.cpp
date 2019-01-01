@@ -1,8 +1,10 @@
-#include "Config.h"
+ï»¿#include "Config.h"
 #include "QFile"
 #include "QApplication"
+#include "QJsonObject"
+#include "QJsonDocument"
 
-Config *Config::instance = nullptr; //³õÊ¼»¯µ¥ÀıÖ¸Õë
+Config *Config::instance = nullptr; //åˆå§‹åŒ–å•ä¾‹æŒ‡é’ˆ
 
 Config::Config()
 {
@@ -25,38 +27,48 @@ Config * Config::getInstance()
 
 void Config::init()
 {
-	//³õÊ¼»¯Ä¬ÈÏµÄÉèÖÃ
+	//åˆå§‹åŒ–é»˜è®¤çš„è®¾ç½®
 	themeResourceUrl = ":/theme/Resoueces/theme/default.qss";
 
 	QFile f("config.ini");
-	//ÎÄ¼ş´æÔÚÔò¶ÁÈëÉèÖÃÊı¾İ
+	//æ–‡ä»¶å­˜åœ¨åˆ™è¯»å…¥è®¾ç½®æ•°æ®
 	if (f.exists())
 	{
+		//ä»æ–‡ä»¶è¯»å–jsonå†…å®¹
 		f.open(QIODevice::ReadOnly);
-		QString temp;
-		//¶ÁÈ¡Ö÷Ìâ×ÊÔ´url
-		temp = f.readLine();
-		temp.chop(1);
-		themeResourceUrl = temp;
+		QByteArray temp = f.readAll();
 		f.close();
+
+		//jsonæ ¼å¼è§£æ
+		QJsonDocument jsonDocument = QJsonDocument::fromJson(temp);
+		QJsonObject json = jsonDocument.object();
+		themeResourceUrl = json.value("ThemeResourceUrl").toString(); //è¯»å–ä¸»é¢˜é£æ ¼æ ·å¼è¡¨è·¯å¾„
 	}
-	//·ñÔòĞÂ½¨ÎÄ¼ş£¬²¢ÓÃÄ¬ÈÏµÄÉèÖÃ¿ªÊ¼ÓÎÏ·
+	//å¦åˆ™æ–°å»ºæ–‡ä»¶ï¼Œå¹¶ç”¨é»˜è®¤çš„è®¾ç½®å¼€å§‹æ¸¸æˆ
 	else
 	{
 		f.open(QIODevice::WriteOnly);
 		f.close();
 	}
 
-	//ÉèÖÃµ±Ç°Ö÷Ìâ·ç¸ñ
+	//è®¾ç½®å½“å‰ä¸»é¢˜é£æ ¼
 	setTheme(themeResourceUrl);
 }
 
 void Config::uninit()
 {
+	//jsonæ ¼å¼å†™å…¥
+	QJsonObject json;
+	json.insert("ThemeResourceUrl", themeResourceUrl); //å†™å…¥ä¸»é¢˜é£æ ¼æ ·å¼è¡¨è·¯å¾„
+
+	QJsonDocument jsonDocument;
+	jsonDocument.setObject(json);
+	QByteArray byteArray = jsonDocument.toJson();
+
+	//æ–‡ä»¶å†™å…¥
 	QFile f("config.ini");
-	f.open(QIODevice::WriteOnly | QIODevice::Truncate); //Ö»Ğ´+Çå¿ÕÒÑÓĞÄÚÈİ
-	f.write(themeResourceUrl.toStdString().c_str());
-	f.write("\n");
+	f.open(QIODevice::WriteOnly | QIODevice::Truncate); //åªå†™+æ¸…ç©ºå·²æœ‰å†…å®¹
+	f.write(byteArray);
 	f.close();
 }
 
