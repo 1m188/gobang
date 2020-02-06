@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(gobang)
+project(gobang LANGUAGES CXX)
 
 find_package(Qt5 REQUIRED Widgets)
 set(CMAKE_AUTOMOC ON)
@@ -26,7 +26,7 @@ target_include_directories_recurse(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURC
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG> $<$<CONFIG:Release>:RELEASE>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 
-if(WIN32)
+if(MSVC_IDE)
     target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS_RELEASE "/subsystem:windows /entry:mainCRTStartup")
 endif()
