@@ -4,6 +4,7 @@
 #include "QPainter"
 #include "QMouseEvent"
 #include "QMessageBox"
+#include "cmath"
 
 GameScene::GameScene(Window *parent) : Scene(parent)
 {

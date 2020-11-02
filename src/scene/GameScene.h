@@ -13,7 +13,8 @@ private:
     double interval; // 线之间的间距
 
     // 棋子的枚举
-    const enum player {
+    enum player
+    {
         black,
         white
     };
