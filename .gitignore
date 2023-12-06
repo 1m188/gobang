@@ -3,3 +3,9 @@
 
 # 忽略生成文件
 build
+
+# 忽略缓存
+.cache
+
+# 忽略xmake缓存
+.xmake
