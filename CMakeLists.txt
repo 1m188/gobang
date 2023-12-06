@@ -1,13 +1,12 @@
-cmake_minimum_required(VERSION 3.15)
-project(gobang LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.5)
+project(gobang CXX)
 
 find_package(Qt5 REQUIRED Widgets)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
+set(target ${PROJECT_NAME})
 file(GLOB_RECURSE sources src/*.cpp)
-add_executable(${PROJECT_NAME} ${sources})
-target_sources(${PROJECT_NAME} PRIVATE res/gobang.qrc)
+add_executable(${target} ${sources})
+target_sources(${target} PRIVATE res/gobang.qrc)
 
 # recurse include path
 function(target_include_directories_recurse target attr root)
@@ -21,12 +20,21 @@ function(target_include_directories_recurse target attr root)
         endif()
     endforeach()
 endfunction()
-target_include_directories_recurse(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories_recurse(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG> $<$<CONFIG:Release>:RELEASE>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
+target_compile_definitions(${target} PRIVATE
+$<$<CONFIG:Debug>:DEBUG>
+$<$<CONFIG:Release>:RELEASE>
+)
+target_link_libraries(${target} PRIVATE Qt5::Widgets)
+
+set_target_properties(${target} PROPERTIES
+AUTOMOC ON
+AUTORCC ON
+AUTOUIC ON
+)
 
 if(MSVC_IDE)
-    target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
-    set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS_RELEASE "/subsystem:windows /entry:mainCRTStartup")
+    target_compile_options(${target} PRIVATE /utf-8)
+    set_target_properties(${target} PROPERTIES LINK_FLAGS_RELEASE "/subsystem:windows /entry:mainCRTStartup")
 endif()
