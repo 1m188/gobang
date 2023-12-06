@@ -2,6 +2,7 @@
 #include "QApplication"
 #include "QDeskTopWidget"
 #include "StartScene.h"
+#include <QScreen>
 
 Window::Window() : QWidget(Q_NULLPTR)
 {
@@ -15,7 +16,13 @@ Window::Window() : QWidget(Q_NULLPTR)
 
     // 移动到屏幕中央
     QRect rect = frameGeometry();
-    rect.moveCenter(QApplication::desktop()->availableGeometry().center());
+    QPoint p;
+#if defined(QT_VERSION) && QT_VERSION >= QT_VERSION_CHECK(5, 14, 2)
+    p = QGuiApplication::primaryScreen()->availableGeometry().center();
+#else
+    p = QApplication::desktop()->availableGeometry().center();
+#endif
+    rect.moveCenter(p);
     move(rect.topLeft());
 }
 
