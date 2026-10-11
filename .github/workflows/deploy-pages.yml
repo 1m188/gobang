@@ -1,0 +1,51 @@
+# 部署 web/ 下的纯静态五子棋页面到 GitHub Pages
+#
+# 前提（一次性，需在 GitHub 网页上操作）：
+#   仓库 Settings -> Pages -> Build and deployment -> Source 选择 "GitHub Actions"
+#
+# 部署成功后访问地址：https://1m188.github.io/gobang/
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [master] # 推送到默认分支即部署
+  workflow_dispatch: # 允许在 Actions 页面手动触发
+
+# 最小权限：部署 Pages 需要 pages 写权限与 OIDC 令牌
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只保留一个部署；新推送会取消进行中的旧部署
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      # 页面全为相对路径引用，直接整目录发布即可，无需改代码
+      - name: 汇集站点文件（排除单元测试）
+        run: |
+          mkdir -p dist
+          rsync -a --exclude 'tests/' web/ dist/
+
+      - name: 配置 GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
