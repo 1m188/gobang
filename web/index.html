@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 主题切换栏（页内直接切换，持久化到 localStorage） -->
+  <div id="theme-bar">
+    <label for="theme-select">主题</label>
+    <select id="theme-select"></select>
+  </div>
+
   <!-- 开始场景（对应原版 StartScene） -->
   <section id="start-scene" class="scene">
     <h1 class="game-title">欢 乐 五 子 棋</h1>
@@ -31,6 +37,7 @@
     </div>
   </section>
 
+  <script src="themes.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

@@ -181,6 +181,20 @@ test('reset 清盘并回到黑棋先行', () => {
   assert.ok(g.place(7, 7).ok);
 });
 
+test('lastMove：初始为 null，随落子更新，reset 清空', () => {
+  const g = new GobangGame();
+  assert.equal(g.lastMove, null);
+  assert.ok(g.place(8, 8).ok);
+  assert.deepEqual(g.lastMove, { x: 8, y: 8 });
+  assert.ok(g.place(9, 8).ok);
+  assert.deepEqual(g.lastMove, { x: 9, y: 8 });
+  // 非法落子不改变 lastMove
+  assert.equal(g.place(9, 8).ok, false);
+  assert.deepEqual(g.lastMove, { x: 9, y: 8 });
+  g.reset();
+  assert.equal(g.lastMove, null);
+});
+
 test('pickPoint：交点 10px 内命中，之外不命中（与原版一致）', () => {
   // 坐标换算：交点 (x, y) 的像素位置为 (x * interval, y * interval)
   assert.deepEqual(pickPoint(80, 40, 40), { x: 2, y: 1 });   // 正中交点

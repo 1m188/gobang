@@ -1,17 +1,116 @@
-/* 忠实复刻 Qt 版的简洁风格：白底、黑字、朴素按钮 */
+/* 五子棋主题样式
+   default/black/gray/yellow 四套配色移植自原版 Qt 的 QSS 主题，
+   wood 为新增木纹风；Canvas 侧配色由 themes.js 提供。 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ===== 主题变量 ===== */
+/* 原版 default.qss 为空 = Qt 默认浅色窗口 */
+body[data-theme='default'] {
+  --bg: #f0f0f0;
+  --text: #000000;
+  --accent: #3c7fb1;
+  --btn-bg: #f0f0f0;
+  --btn-border: #8f8f8f;
+  --btn-text: #000000;
+  --btn-hover-bg: #e5f1fb;
+  --btn-hover-border: #3c7fb1;
+  --btn-hover-text: #000000;
+  --btn-active-bg: #dcdcdc;
+  --btn-active-text: #000000;
+  --modal-bg: #ffffff;
+  --modal-border: #8f8f8f;
+  --overlay: rgba(0, 0, 0, 0.35);
+  --btn-radius: 4px;
+}
+
+/* 移植 black.qss：#222 底 / #BBB 文字 / #333 边框 / 黄色强调 */
+body[data-theme='black'] {
+  --bg: #222222;
+  --text: #bbbbbb;
+  --accent: #ffd700;
+  --btn-bg: #222222;
+  --btn-border: #333333;
+  --btn-text: #bbbbbb;
+  --btn-hover-bg: #333333;
+  --btn-hover-border: #444444;
+  --btn-hover-text: #bbbbbb;
+  --btn-active-bg: #111111;
+  --btn-active-text: #ffd700;
+  --modal-bg: #222222;
+  --modal-border: #333333;
+  --overlay: rgba(0, 0, 0, 0.55);
+  --btn-radius: 4px;
+}
+
+/* 移植 gray.qss：#888 底 / #555 边框 / 按下黑底浅字 */
+body[data-theme='gray'] {
+  --bg: #888888;
+  --text: #000000;
+  --accent: #000000;
+  --btn-bg: #888888;
+  --btn-border: #555555;
+  --btn-text: #000000;
+  --btn-hover-bg: #999999;
+  --btn-hover-border: #555555;
+  --btn-hover-text: #000000;
+  --btn-active-bg: #000000;
+  --btn-active-text: #aaaaaa;
+  --modal-bg: #888888;
+  --modal-border: #555555;
+  --overlay: rgba(0, 0, 0, 0.4);
+  --btn-radius: 4px;
+}
+
+/* 移植 yellow.qss：beige 底 / palegoldenrod 按钮 / darkkhaki 边框 */
+body[data-theme='yellow'] {
+  --bg: beige;
+  --text: #000000;
+  --accent: #8b7500;
+  --btn-bg: palegoldenrod;
+  --btn-border: darkkhaki;
+  --btn-text: #000000;
+  --btn-hover-bg: khaki;
+  --btn-hover-border: darkkhaki;
+  --btn-hover-text: #000000;
+  --btn-active-bg: #d0d67c;
+  --btn-active-text: #000000;
+  --modal-bg: cornsilk;
+  --modal-border: darkkhaki;
+  --overlay: rgba(0, 0, 0, 0.3);
+  --btn-radius: 5px;
+}
+
+/* 新增木纹风：暖棕底 + 木色棋盘 */
+body[data-theme='wood'] {
+  --bg: #2e2016;
+  --text: #f3e2c7;
+  --accent: #ffd27f;
+  --btn-bg: #5a4232;
+  --btn-border: #8a6a4a;
+  --btn-text: #f3e2c7;
+  --btn-hover-bg: #6d523d;
+  --btn-hover-border: #b08d5f;
+  --btn-hover-text: #ffd27f;
+  --btn-active-bg: #3a2a1d;
+  --btn-active-text: #ffd27f;
+  --modal-bg: #4a3626;
+  --modal-border: #8a6a4a;
+  --overlay: rgba(0, 0, 0, 0.5);
+  --btn-radius: 6px;
+}
+
 body {
-  background: #fff;
-  color: #000;
+  background: var(--bg);
+  color: var(--text);
   font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
   display: flex;
   justify-content: center;
   min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .hidden {
@@ -25,11 +124,45 @@ body {
   padding: 24px 16px;
 }
 
+/* ===== 主题切换栏 ===== */
+#theme-bar {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+#theme-select {
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--btn-text);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--btn-radius);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
 /* ===== 开始场景 ===== */
 .game-title {
   font-size: 48px;
   font-weight: bold;
+  letter-spacing: 2px;
   margin: 120px 0 80px;
+}
+
+.game-title::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 3px;
+  margin: 18px auto 0;
+  background: var(--accent);
+  border-radius: 2px;
 }
 
 .big-button {
@@ -45,7 +178,8 @@ body {
 }
 
 #board {
-  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
@@ -55,39 +189,47 @@ body {
   margin-top: 16px;
 }
 
-/* 通用按钮：仿 Qt 默认的灰色立体按钮 */
+/* 通用按钮：对应原版 QSS 的 normal / hover / pressed 三态 */
 button {
   font-family: inherit;
-  color: #000;
-  background: #f0f0f0;
-  border: 1px solid #8f8f8f;
-  border-radius: 3px;
+  color: var(--btn-text);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: var(--btn-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
 }
 
 button:hover {
-  background: #e5f1fb;
-  border-color: #3c7fb1;
+  color: var(--btn-hover-text);
+  background: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border);
 }
 
 button:active {
-  background: #dcdcdc;
+  color: var(--btn-active-text);
+  background: var(--btn-active-bg);
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 /* ===== 对局结束弹窗（对应原版 QMessageBox） ===== */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--overlay);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal-box {
-  background: #fff;
-  border: 1px solid #8f8f8f;
-  border-radius: 4px;
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   padding: 28px 36px;
   max-width: 86vw;
   text-align: center;

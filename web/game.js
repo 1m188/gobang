@@ -66,6 +66,7 @@ class GobangGame {
     this._stones = new Map(); // "x,y" -> BLACK | WHITE
     this._current = BLACK;    // 原版 whichPlayer 初始为 black
     this._status = 'playing';
+    this._lastMove = null;    // 最后一手，用于 UI 标记
   }
 
   get currentPlayer() {
@@ -74,6 +75,10 @@ class GobangGame {
 
   get status() {
     return this._status;
+  }
+
+  get lastMove() {
+    return this._lastMove;
   }
 
   stoneAt(x, y) {
@@ -98,6 +103,7 @@ class GobangGame {
 
     const mover = this._current;
     this._stones.set(key, mover);
+    this._lastMove = { x, y };
 
     // 判定输赢：检查刚刚落子的一方（对应原版换手后检查上一手的一方）
     const moverStones = [];
@@ -126,6 +132,14 @@ if (typeof document !== 'undefined') {
   const CANVAS_SIZE = 640;                          // 画布边长（像素）
   const INTERVAL = CANVAS_SIZE / (LINE_NUM + 1);    // 线间距，对应原版 interval = width / (lineNum + 1)
 
+  // 星位与天元（15 路棋盘，坐标 1..15）
+  const STAR_POINTS = [[4, 4], [4, 12], [8, 8], [12, 4], [12, 12]];
+  // 木纹条纹位置 [y, 高度]（固定值保证重绘稳定，仅 wood 主题使用）
+  const GRAIN_BANDS = [
+    [28, 6], [86, 4], [149, 9], [207, 5], [283, 7],
+    [341, 4], [419, 8], [497, 5], [563, 7], [611, 4],
+  ];
+
   const TITLES = {
     [BLACK]: '五子棋-请黑棋落子',
     [WHITE]: '五子棋-请白棋落子',
@@ -143,6 +157,7 @@ if (typeof document !== 'undefined') {
   const modalText = document.getElementById('modal-text');
   const modalYes = document.getElementById('modal-yes');
   const modalNo = document.getElementById('modal-no');
+  const themeSelect = document.getElementById('theme-select');
   const ctx = canvas.getContext('2d');
 
   // 场景切换（对应原版场景间的 show / hide 切换）
@@ -161,12 +176,26 @@ if (typeof document !== 'undefined') {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  // 绘制棋盘与棋子（对应原版 paintEvent）
+  // 绘制棋盘与棋子（对应原版 paintEvent，配色随主题）
   function drawBoard() {
+    const theme = THEMES[currentTheme];
     ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1;
+    // 棋盘底色
+    ctx.fillStyle = theme.boardBg;
+    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    // 木纹条纹（仅 wood 主题）：固定位置横条，保证重绘稳定
+    if (theme.grain) {
+      ctx.save();
+      ctx.globalAlpha = 0.08;
+      ctx.fillStyle = '#8a5a24';
+      for (const [bandY, bandH] of GRAIN_BANDS) {
+        ctx.fillRect(0, bandY, CANVAS_SIZE, bandH);
+      }
+      ctx.restore();
+    }
     // 背景线：第 1..15 条，两端通到画布边缘，与原版一致
+    ctx.strokeStyle = theme.lineColor;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     for (let i = 1; i <= LINE_NUM; i++) {
       const p = i * INTERVAL;
@@ -176,18 +205,50 @@ if (typeof document !== 'undefined') {
       ctx.lineTo(p, CANVAS_SIZE);
     }
     ctx.stroke();
-    // 棋子：圆心在交点上，直径等于线间距；黑实白空、黑色描边，与原版一致
+    // 星位与天元
+    ctx.fillStyle = theme.starColor;
+    for (const [sx, sy] of STAR_POINTS) {
+      ctx.beginPath();
+      ctx.arc(sx * INTERVAL, sy * INTERVAL, INTERVAL * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // 棋子：圆心在交点上，直径等于线间距；径向渐变高光 + 落影
     for (let x = 1; x <= LINE_NUM; x++) {
       for (let y = 1; y <= LINE_NUM; y++) {
         const stone = game.stoneAt(x, y);
         if (stone === null) {
           continue;
         }
+        const cx = x * INTERVAL;
+        const cy = y * INTERVAL;
+        const r = INTERVAL / 2;
+        const cfg = stone === BLACK ? theme.blackStone : theme.whiteStone;
+        const grad = ctx.createRadialGradient(
+          cx - r * 0.35, cy - r * 0.35, r * 0.1,
+          cx, cy, r
+        );
+        grad.addColorStop(0, cfg.inner);
+        grad.addColorStop(1, cfg.outer);
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetY = 2;
+        ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(x * INTERVAL, y * INTERVAL, INTERVAL / 2, 0, Math.PI * 2);
-        ctx.fillStyle = stone === BLACK ? '#000' : '#fff';
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
+        ctx.strokeStyle = cfg.stroke;
+        ctx.lineWidth = 1;
         ctx.stroke();
+        // 最后一手标记环
+        if (game.lastMove && game.lastMove.x === x && game.lastMove.y === y) {
+          ctx.strokeStyle = theme.lastMoveColor;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r * 0.45, 0, Math.PI * 2);
+          ctx.stroke();
+        }
       }
     }
   }
@@ -258,8 +319,39 @@ if (typeof document !== 'undefined') {
     showScene('start');
   });
 
+  // ===== 主题初始化（对应原版 Config 的持久化，存 localStorage） =====
+  // localStorage 访问可能被浏览器禁用，安全降级为仅切换、不持久化
+  const themeStore = (() => {
+    try {
+      return window.localStorage;
+    } catch (e) {
+      return null;
+    }
+  })();
+  let currentTheme = loadTheme(themeStore);
+
+  // 应用主题：设置 body 属性、同步下拉框并重绘棋盘
+  function applyTheme(name) {
+    currentTheme = normalizeTheme(name);
+    document.body.dataset.theme = currentTheme;
+    themeSelect.value = currentTheme;
+    refresh();
+  }
+
+  for (const name of THEME_NAMES) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = THEMES[name].label;
+    themeSelect.appendChild(option);
+  }
+  themeSelect.addEventListener('change', () => {
+    const name = normalizeTheme(themeSelect.value);
+    saveTheme(themeStore, name);
+    applyTheme(name);
+  });
+
   initCanvas();
-  refresh();
+  applyTheme(currentTheme);
 }
 
 // node 测试环境导出；浏览器中由上方 UI 部分直接使用
