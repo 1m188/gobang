@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五子棋</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 开始场景（对应原版 StartScene） -->
+  <section id="start-scene" class="scene">
+    <h1 class="game-title">欢 乐 五 子 棋</h1>
+    <button id="start-button" class="big-button" type="button">开始新游戏</button>
+  </section>
+
+  <!-- 游戏场景（对应原版 GameScene） -->
+  <section id="game-scene" class="scene hidden">
+    <h1 id="status-title">五子棋-请黑棋落子</h1>
+    <canvas id="board" width="640" height="640">您的浏览器不支持 Canvas，无法游玩。</canvas>
+    <button id="back-button" class="small-button" type="button">返回首页</button>
+
+    <!-- 对局结束弹窗（对应原版 QMessageBox） -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-box">
+        <p id="modal-text"></p>
+        <div class="modal-actions">
+          <button id="modal-yes" type="button">再来一局</button>
+          <button id="modal-no" type="button">返回首页</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="game.js"></script>
+</body>
+</html>

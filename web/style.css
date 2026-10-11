@@ -1,0 +1,110 @@
+/* 忠实复刻 Qt 版的简洁风格：白底、黑字、朴素按钮 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fff;
+  color: #000;
+  font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+/* ===== 开始场景 ===== */
+.game-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin: 120px 0 80px;
+}
+
+.big-button {
+  font-size: 24px;
+  padding: 10px 48px;
+}
+
+/* ===== 游戏场景 ===== */
+#status-title {
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+
+#board {
+  background: #fff;
+  cursor: pointer;
+}
+
+.small-button {
+  font-size: 14px;
+  padding: 6px 20px;
+  margin-top: 16px;
+}
+
+/* 通用按钮：仿 Qt 默认的灰色立体按钮 */
+button {
+  font-family: inherit;
+  color: #000;
+  background: #f0f0f0;
+  border: 1px solid #8f8f8f;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e5f1fb;
+  border-color: #3c7fb1;
+}
+
+button:active {
+  background: #dcdcdc;
+}
+
+/* ===== 对局结束弹窗（对应原版 QMessageBox） ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #fff;
+  border: 1px solid #8f8f8f;
+  border-radius: 4px;
+  padding: 28px 36px;
+  max-width: 86vw;
+  text-align: center;
+}
+
+#modal-text {
+  font-size: 18px;
+  margin-bottom: 22px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.modal-actions button {
+  font-size: 16px;
+  padding: 8px 28px;
+}
